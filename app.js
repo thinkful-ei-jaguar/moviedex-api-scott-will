@@ -35,7 +35,6 @@ app.get('/movie', function handleMovies(req, res) {
   const { genre, country, avg_vote } = req.query
 
   if(genre) {
-
     filteredMovies = filteredMovies.filter(eachMovie => eachMovie.genre.toLowerCase().includes(genre.toLowerCase()))
   }
 
@@ -47,7 +46,7 @@ app.get('/movie', function handleMovies(req, res) {
 
   if(avg_vote) {
     filteredMovies.filter(eachMovie => {
-      Number(eachMovie.avg_vote) >= Number(avg_vote)
+      +eachMovie.avg_vote >= +avg_vote
     });
   }
   
