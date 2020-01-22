@@ -8,7 +8,7 @@ const helmet = require('helmet')
 
 app.use(cors());
 app.use(helmet()); 
-app.use(morgan('common')); // let's see what 'common' format looks like
+app.use(morgan('dev')); 
 
 const movies= require('./movieData.js');
 
