@@ -30,9 +30,19 @@ app.use(function validateBearerToken(req, res, next) {
 
 
 function handleMovies(req, res) {
+  let filteredMovies = [...movies]
+
   const { genre, country, avg_vote } = req.query
-  
-  res.json(movies);
+
+  const acceptedGenres = ['Animation', 'Comedy', 'War', 'Thriller', 'Drama', 'Western', 'Crime', 'Grotesque', 'Romantic', 'Fantasy', 'Musical', 'Biography', 'History', 'Adventure', 'Spy'];
+
+  if(genre) {
+    if(!acceptedGenres.includes(genre)){
+      return res.status(400).json({ error: "Genres must be one of: Action, Puzzle, Strategy, Casual, Arcade, Card "});
+    }
+      //using the copied app data(you don't want to use the original imported data)filter for each app, check that the Genres key matches the req.query.genres value and assign the new array as filteredApps
+      filteredMovies = filteredMovies.filter(eachApp => eachApp.genre.includes(genre))
+  }
 }
 
 app.get('/movie', handleMovies);
