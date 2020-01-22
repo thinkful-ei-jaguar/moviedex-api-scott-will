@@ -20,7 +20,7 @@ app.use(function validateBearerToken(req, res, next) {
   if(!authVal.startsWith('Bearer')) {
     return res.status(400).json({ error: "Missing or incorrect Authorization header"});
   }
-  const token = authVal.split(' ')[1]
+  const token = authVal.split(' ')[1];
   if(!authVal || token !== API_TOKEN) {
     return res.status(401).json({error: 'Invalid credentials'});
   }
@@ -29,23 +29,30 @@ app.use(function validateBearerToken(req, res, next) {
 })
 
 
-function handleMovies(req, res) {
+app.get('/movie', function handleMovies(req, res) {
   let filteredMovies = [...movies]
 
   const { genre, country, avg_vote } = req.query
 
-  const acceptedGenres = ['Animation', 'Comedy', 'War', 'Thriller', 'Drama', 'Western', 'Crime', 'Grotesque', 'Romantic', 'Fantasy', 'Musical', 'Biography', 'History', 'Adventure', 'Spy'];
-
   if(genre) {
-    if(!acceptedGenres.includes(genre)){
-      return res.status(400).json({ error: "Genres must be one of: Action, Puzzle, Strategy, Casual, Arcade, Card "});
-    }
-      //using the copied app data(you don't want to use the original imported data)filter for each app, check that the Genres key matches the req.query.genres value and assign the new array as filteredApps
-      filteredMovies = filteredMovies.filter(eachApp => eachApp.genre.includes(genre))
-  }
-}
 
-app.get('/movie', handleMovies);
+    filteredMovies = filteredMovies.filter(eachMovie => eachMovie.genre.toLowerCase().includes(genre.toLowerCase()))
+  }
+
+  if(country) {
+    filteredMovies.filter(eachMovie => {
+      eachMovie.genre.toLowerCase().includes(country.toLowerCase())
+    });
+  }
+
+  if(avg_vote) {
+    filteredMovies.filter(eachMovie => {
+      Number(eachMovie.avg_vote) >= Number(avg_vote)
+    });
+  }
+  
+  res.json(filteredMovies);
+})
 
 
 app.listen(8000, () => {
