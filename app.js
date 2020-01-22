@@ -28,7 +28,10 @@ app.use(function validateBearerToken(req, res, next) {
   next();
 })
 
+
 function handleMovies(req, res) {
+  const { genre, country, avg_vote } = req.query
+  
   res.json(movies);
 }
 
